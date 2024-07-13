@@ -1,5 +1,6 @@
 <template>
   <div class="bg" onswipe="exit">
+    <!--这里是输入/输出界面-->
     <div class="bg" if="{{upd}}">
       <scroll scroll-x=true style="top: 76px;" class="input1" id="input">
         <text class="input2">{{input}}</text>
@@ -18,6 +19,7 @@
         <img src="/common/back.png" class="down"/>
       </div>
     </div>
+    <!--输入法-->
     <div style="position: absolute;left: 2px; top: 228px;;width: 334px;flex-wrap: wrap;align-content: flex-start;flex-direction: row;">
       <text class="btn"onclick="press(7)">7</text>
       <text class="btn"onclick="press(8)">8</text>
@@ -38,11 +40,13 @@
       <text class="btn"onclick="press('.')">.</text>
       <text class="btn"onclick=nagitve style="margin-right:0px;"if={{TYPE.nagitve}}>+/-</text>
     </div>
+    <!--顶栏-->
     <img src="/common/info.png" @click="openab()"style="position: absolute; left: 276px; top: 19px" />
 		<div onclick="changeTYPE"style="position: absolute;left: 60px;top:17px; width:216px;height: 42px;display: flex;flex-direction: row;justify-content: center;align-items: center;">
       <text>{{TYPE.name}}</text>
       <img src="/common/back.png" style="transform: rotate(-90deg);transform-origin:20px 20px;"/>
     </div>
+    <!--表单-->
     <div class="bg" if={{list.show}}>
       <text style="position: absolute;left: 60px;top:17px; width:216px;height: 42px;text-align:center">{{list.title}}</text>
       <list style="position: absolute; top: 65px;left:6px; width: 324px; height: 415px;" id="list" bounces="true">
@@ -53,6 +57,7 @@
         </list-item>
       </list>
     </div>
+    <!--关于-->
     <scroll scroll-y=true class="bg" if="{{ab}}">
       <img src="/common/about.png" />
       <img src="/common/t.png" if={{sci}} style="position: absolute;left: 246px;top: 456px"onclick="changesci" />
