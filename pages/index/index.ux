@@ -230,6 +230,7 @@ export default {
   },changeTYPE(){
     showlist(types,type1,"类型",0)
   },choose(id){
+    //that.list.choose=id radio实现方法
     switch (back) {
       case 0:
         type1=id
@@ -250,7 +251,7 @@ export default {
         break;
     }
     save()
-    that.exit("e")
+    that.exit("e")//要radio吧这个注释掉
   },press(num){
     this.input+=num
     this.$element("input").getScrollRect({
