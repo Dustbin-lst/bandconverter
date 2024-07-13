@@ -1,0 +1,313 @@
+<template>
+  <div class="bg" onswipe="exit">
+    <div class="bg" if="{{upd}}">
+      <scroll scroll-x=true style="top: 76px;" class="input1" id="input">
+        <text class="input2">{{input}}</text>
+      </scroll>
+      <div class="unit" style="top: 76px;background-color:#009945"onclick=changeUINT1>
+        <text if="{{unit1.shortname}}">{{unit1.shortname}}</text>
+        <text else>{{unit1.name}}</text>
+        <img src="/common/back.png"class="down"/>
+      </div>
+      <scroll scroll-x=true style="top: 152px;" class="input1">
+        <text class="input2"style="border: 2px solid #7F7F7F;">{{output}}</text>
+      </scroll>
+      <div class="unit" style="top: 152px;background-color:#175180"onclick=changeUINT2>
+        <text if="{{unit2.shortname}}">{{unit2.shortname}}</text>
+        <text else>{{unit2.name}}</text>
+        <img src="/common/back.png" class="down"/>
+      </div>
+    </div>
+    <div style="position: absolute;left: 2px; top: 228px;;width: 334px;flex-wrap: wrap;align-content: flex-start;flex-direction: row;">
+      <text class="btn"onclick="press(7)">7</text>
+      <text class="btn"onclick="press(8)">8</text>
+      <text class="btn"onclick="press(9)">9</text>
+      <img src="/common/change.png"onclick=change class="btn" style="margin-right:0px;"/>
+      
+      <text class="btn"onclick="press(4)">4</text>
+      <text class="btn"onclick="press(5)">5</text>
+      <text class="btn"onclick="press(6)">6</text>
+      <img src="/common/clear.png"onclick=clear class="btn" style="margin-right:0px;"/>
+      
+      <text class="btn"onclick="press(1)">1</text>
+      <text class="btn"onclick="press(2)">2</text>
+      <text class="btn"onclick="press(3)">3</text>
+      <img src="/common/del.png"onclick=del class="btn" style="margin-right:0px;"/>
+      <text class="btn"onclick="divide">/</text>
+      <text class="btn"onclick="press(0)">0</text>
+      <text class="btn"onclick="press('.')">.</text>
+      <text class="btn"onclick=nagitve style="margin-right:0px;"if={{TYPE.nagitve}}>+/-</text>
+    </div>
+    <img src="/common/info.png" @click="openab()"style="position: absolute; left: 276px; top: 19px" />
+		<div onclick="changeTYPE"style="position: absolute;left: 60px;top:17px; width:216px;height: 42px;display: flex;flex-direction: row;justify-content: center;align-items: center;">
+      <text>{{TYPE.name}}</text>
+      <img src="/common/back.png" style="transform: rotate(-90deg);transform-origin:20px 20px;"/>
+    </div>
+    <div class="bg" if={{list.show}}>
+      <text style="position: absolute;left: 60px;top:17px; width:216px;height: 42px;text-align:center">{{list.title}}</text>
+      <list style="position: absolute; top: 65px;left:6px; width: 324px; height: 415px;" id="list" bounces="true">
+        <list-item for="{{list.list}}" onclick="choose({{$idx}})"style="height: 92px;padding-left:20px;background-color: #262626;border-radius: 27px;margin-bottom:8px;flex-shrink: 0;"type="aa">
+          <text>{{$item.name}}</text><text style="color:#A8A8A8;">{{$item.shortname}}</text>
+          <image src="/common/true.png" if="{{$idx==list.choose}}"style="position: absolute;left: 264px;top: 26px;"/>
+          <image src="/common/false.png" else style="position: absolute;left: 264px;top: 26px;"/>
+        </list-item>
+      </list>
+    </div>
+    <scroll scroll-y=true class="bg" if="{{ab}}">
+      <img src="/common/about.png" />
+      <img src="/common/t.png" if={{sci}} style="position: absolute;left: 246px;top: 456px"onclick="changesci" />
+      <img src="/common/f.png" else style="position: absolute;left: 246px;top: 456px"onclick="changesci" />
+    </scroll>
+		
+		<img src="/common/back.png" @click="exit('e')"style="position: absolute; left: 20px; top: 19px"/>
+	</div>
+</template>
+
+<style>
+.bg{
+  position: absolute;
+  width: 336px;
+  height: 480px;
+  background-color: black;
+}
+.unit{
+  position: absolute;
+  right: 2px;
+  padding-right:50px;
+  min-width: 120px;
+  height: 66px;
+  border-radius: 27px;
+}
+.down{
+  transform: rotate(-90deg);transform-origin:20px 20px;
+  position: absolute;
+  right: 10px;
+  top: 13px;
+}
+text{
+  font-size: 32px;
+  font-weight: bold;
+  text-align: left;
+  color: #FFFFFF;
+  padding-left: 10px;
+}
+.input1{
+  position: absolute;
+  left: 2px;
+  height: 66px;
+  max-width:230px;
+  padding-right:29px
+}
+.input2{
+  font-size: 32px;padding-left: 10px;padding-top: 12px;min-width: 200px;border-radius: 27px;border: 3px solid #FFFFFF;padding-right:10px
+}
+.btn{
+  margin-right: 4px;
+  margin-bottom: 4px;
+  padding-left: 0px;
+  width: 80px;
+  height: 58px;
+  border-radius: 29px;
+  text-align: center;
+  background-color: #262626;
+}
+</style>
+
+<script>
+import storage from '@system.storage' 
+import prompt from '@system.prompt' 
+
+class type{
+  constructor(name){
+    this.name=name
+    this.list=[]
+    for (let i = 1; i < arguments.length; i++) {
+      this.list.push(new unit(arguments[i]))
+    }
+    this.length=this.list.length
+    this.shortname=""
+    this.nagitve=(name=="温度")
+  }
+}
+class unit{
+  constructor(a){
+    this.name=a[0]
+    this.shortname=a[1]
+    this.muti=a[2]//该单位是标准单位几倍
+    this.plus=a[3]//乘完之后加多少（参考温度
+  }
+  to(a){return a*this.muti+this.plus}//从标准单位转到该单位
+  back(a){return (a-this.plus)/this.muti}//从该单位转到标准单位
+}
+const types=[
+  new type("长度",["千米","km",0.001,0],["米","m",1,0],["分米","dm",10,0],["厘米","cm",100,0],["毫米","mm",1000,0],["微米","μm",1000000,0],["纳米","nm",1000000000,0],["皮米","pm",1000000000000,0],["海里","pm",1/1852,0],["英寸","in",(1/0.0254),0],["英尺","ft",(1/0.3048),0],["里","",0.002,0],["丈","",0.3,0],["尺","",3,0],["寸","",30,0],["分","",300,0],["厘","",3000,0],["毫","",30000,0],["光年","ly",1.05e-16,0]),
+  new type("面积",["平方米","m2",1,0],["平方千米","km2",0.000001,0],["公顷","",0.0001,0],["公亩","",0.01,0],["平方分米","dm2",100,0],["平方厘米","cm2",10000,0],["平方毫米","mm2",1000000,0],["平方微米","μm2",1000000000000,0],["英亩","ac",0.000247105407259363,0],["平方英里","mile2",0.000000386102158542,0],["平方码","yd2",1.195990046301080256,0],["平方英尺","ft2",10.76391041670972231,0],["平方英寸","in2",1550.003100006200012,0],["平方竿","rd2",0.039536861034746454,0],["顷","",0.000015,0],["亩","",0.0015,0],["平方尺","",9,0],["平方寸","",900,0]),
+  new type("体积",["立方米","m3",1,0],["立方分米","dm3",1000,0],["立方厘米","cm3",1000000,0],["立方毫米","mm3",1000000000,0],["公石","hl",10,0],["升","l",1000,0],["分升","dl",10000,0],["厘升","cl",100000,0],["毫升","ml",1000000,0],["立方英尺","ft3",0.0283168,0],["立方英寸","in3",1000000000/16387,0],["立方码","yd3",1.31,0],["亩英尺","af3",0.000811,0]),
+  new type("重量",["千克","kg",1,0],["克","g",1000,0],["吨","t",0.001,0],["毫克","mg",1000000,0],["微克","μg",1000000000,0],["磅","lb",1/0.45359237,0],["盎司","oz",35.27396194958041292,0],["担","",0.02,0],["斤","",2,0],["两","",20,0],["钱","",200,0]),
+  new type("温度",["摄氏度","°C",1,0],["华氏度","°F",1.8,32],["兰氏度","°R",1.8,491.67],["开尔文","K",1,273.15]),
+  new type("时间",["年","yr",1,0],["周","wk",365.25/7,0],["天","d",365.25,0],["秒","s",31536000,0],["毫秒","ms",31557600000,0],["微秒","μs",31557600000000,0],["皮秒","ps",31557600000000000000,0]),
+  new type("速度",["米/秒","m/s",1,0],["光速","c",1/299792458,0],["马赫","Ma",1/340.3,0],["千米/小时","km/h",3.6,0],["千米/秒","km/s",0.001,0],["海里/小时","kn",1/0.44704,0],["英里/小时","mph",2.23693629205440229,0],["英寸/秒","ips",39.37007874015748031,0],["英尺/秒","fps",3.280839895013123359,0]),
+  new type("角度",["度","deg",1,0],["弧度","rad",Math.PI/180,0],["百分度","gra",10/9,0]),
+  new type("能量",["焦耳","J",1,0],["卡路里","cal",1/4.184,0],["千瓦时","kWh",1/3600000,0],["电子伏特","eV",6.241509e+18,0]),
+  new type("压强",["大气压","",1,0],["帕","Pa",101325,0],["千帕","kPa",101.325,0],["毫米汞柱","mmHg",760.1275,0]),
+  new type("数据",["位","b",8,0],["字节","B",1,0],["千二进制B","KiB",1/1024,0],["千字节","KB",1/1000,0],["千比特","Kb",1/125,0],["MiB","",1/131072,0],["MB","",1/1000000,0],["Mb","",1/125000,0],["GiB","",1/134217728,0],["GB","",1/1000000000,0],["Gb","",1/125000000,0],["TiB","",1/137438953472,0],["TB","",1/1000000000000,0],["Tb","",1/125000000000,0],["PiB","",1/140737488355328,0],["PB","",1/1000000000000000,0],["Pb","",1/125000000000000,0])
+]
+var that,back=0,type1=0,divide=-1;
+export default {
+  private: {
+    ab:false,
+    TYPE:type,
+    //ani:0, style="top:{{ani}}"
+    unit1:unit,
+    unit2:unit,
+    input:"",
+    output:"",
+    list:{
+      show:0,
+      list:[],
+      choose:0,
+      title:"类型",
+    },upd:false,
+    sci:true
+  },onInit(){
+    that=this
+    storage.get({key: 'lstconv',success: (data)=>{
+			if(data){
+        let save=JSON.parse(data)
+        that.sci=save.sci
+				that.TYPE=types[save.type]
+        that.unit1=that.TYPE.list[save.u1]
+        that.unit2=that.TYPE.list[save.u2]
+        type1=save.type
+			}else{
+				that.TYPE=types[0]
+        that.unit1=that.TYPE.list[0]
+        that.unit2=that.TYPE.list[1]
+			}
+		},fail:()=>{},complete:()=>{console.log(save);that.upd=true}})
+  },
+  exit(a) {
+  		if(a.direction=='right'||a=="e"){
+        /*clearInterval(ani)
+        ani=setInterval(()=>{
+        if(that.ani<-480){
+          下面的代码
+        }
+        else{that.ani-=10;}
+        },5)
+        */
+        if(this.ab)this.ab=false
+          else if(this.list.show){this.list.show=false;this.upd=true}
+          else this.$app.exit()
+          //clearInterval(ani)
+      }
+	},onBackPress(){
+    this.exit("e")
+    return true
+  },openab(){
+    this.ab=true
+    //show()
+  },changesci(){
+    this.sci=!this.sci
+    save()
+    getoutput()
+  },change(){
+    let temp=this.unit1
+    this.unit1=this.unit2
+    this.unit2=temp
+    this.input=this.output.toString()
+    save()
+    getoutput()
+  },changeUINT1(){
+    showlist(that.TYPE.list,that.TYPE.list.indexOf(that.unit1),that.TYPE.name+"单位",1)
+  },changeUINT2(){
+    showlist(that.TYPE.list,that.TYPE.list.indexOf(that.unit2),that.TYPE.name+"单位",2)
+  },changeTYPE(){
+    showlist(types,type1,"类型",0)
+  },choose(id){
+    switch (back) {
+      case 0:
+        type1=id
+        that.TYPE=types[id]
+        that.unit1=that.TYPE.list[0]
+        that.unit2=that.TYPE.list[1]
+        this.clear()
+        break;
+      case 1:
+        that.unit1=that.TYPE.list[id]
+        getoutput()
+        break;
+      case 2:
+        that.unit2=that.TYPE.list[id]
+        getoutput()
+        break;
+      default:
+        break;
+    }
+    save()
+    that.exit("e")
+  },press(num){
+    this.input+=num
+    this.$element("input").getScrollRect({
+        success({ width }) {
+          that.$element("input").scrollTo({
+        top: 0,
+        left: width,
+        behavior: 'smooth'
+      })
+        }})
+    getoutput()
+  },del(){
+    if(this.input.length==divide)divide=-1
+    this.input=this.input.slice(0,-1)
+    getoutput()
+  },clear(){
+    this.input=""
+    divide=-1
+    getoutput()
+  },nagitve(){
+    if(that.input=="")return
+    this.input=-parseFloat(this.input)+""
+    getoutput()
+  },divide(){
+    if(divide>-1){prompt.showToast({message: '不能有两个/',duration: 2000});return}
+    this.input+='/'
+    divide=this.input.length
+  }
+}
+function save(){
+  let data={
+    type:type1,
+    u1:that.TYPE.list.indexOf(that.unit1),
+    u2:that.TYPE.list.indexOf(that.unit2),
+    sci:that.sci,
+  }
+  storage.set({
+					key: "lstconv",
+					value: JSON.stringify(data),
+					success:()=>{console.log(data)},
+					fail:()=>{},complete:()=>{}
+				});
+}
+function getoutput(){
+  if(that.input==""){that.output="";return}
+  
+  let temp=divide==-1?parseFloat(that.input):parseFloat(that.input)/parseFloat(that.input.slice(divide))
+  temp=parseFloat(that.unit2.to(that.unit1.back(temp)))
+  that.output=that.sci?temp:temp.toString()
+}
+function showlist(list,choose,title,b){
+  that.list.list=list
+  that.list.choose=choose
+  that.list.title=title
+  back=b
+  that.list.show=true
+  setTimeout(()=>{that.$element("list").scrollTo({index: that.list.choose,behavior: 'smooth'});that.upd=0}, 100);
+  //show()
+}
+/*
+const show=()=>{
+  clearInterval(ani);that.ani=-480;ani=setInterval(()=>{if(that.ani>=0)clearInterval(ani);else{that.ani+=10;}},5)
+  //这个应用写了动画，望周知
+}*/
+</script>
