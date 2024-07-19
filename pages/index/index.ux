@@ -54,8 +54,8 @@
         <list-item for="{{list.list}}" onclick="choose({{$idx}})"style="height: 70px;padding-left:7px;margin-bottom:8px;flex-wrap: wrap;"type="aa">
           <image src="/common/true.png" if="{{$idx==list.choose}}"style="position: absolute;"/>
           <image src="/common/false.png" else style="position: absolute;"/>
-          <text style="font-size: 30px;">{{$item.name}}</text>
-          <text style="color:#A8A8A8;font-size: 30px;">{{$item.shortname}}</text>
+          <text>{{$item.name}}</text>
+          <text style="color:#A8A8A8;">{{$item.shortname}}</text>
         </list-item>
       </list>
     </div>
@@ -93,7 +93,7 @@
   background-color: black;
 }
 text{
-  font-size: 32px;
+  font-size: 30px;
   font-weight: bold;
   text-align: left;
   color: #FFFFFF;
