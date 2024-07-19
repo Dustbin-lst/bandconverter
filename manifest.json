@@ -14,7 +14,7 @@
   ],
   "config": {
     "logLevel": "log",
-    "designWidth": 336
+    "designWidth": 480
   
   },
   "router": {

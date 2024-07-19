@@ -2,119 +2,135 @@
   <div class="bg" onswipe="exit">
     <!--这里是输入/输出界面-->
     <div class="bg" if="{{upd}}">
-      <scroll scroll-x=true style="top: 76px;" class="input1" id="input">
-        <text class="input2">{{input}}</text>
-      </scroll>
-      <div class="unit" style="top: 76px;background-color:#009945"onclick=changeUINT1>
-        <text if="{{unit1.shortname}}">{{unit1.shortname}}</text>
-        <text else>{{unit1.name}}</text>
-        <img src="/common/back.png"class="down"/>
+      <div class="input" onclick=changeUINT1>
+        <scroll scroll-x=true class="input1" id="input">
+          <text>{{input}}</text>
+        </scroll>
+        <text if="{{unit1.shortname}}" class="unit">{{unit1.shortname}}</text>
+        <text else class="unit">{{unit1.name}}</text>
+        <text class="l">|</text>
       </div>
-      <scroll scroll-x=true style="top: 152px;" class="input1">
-        <text class="input2"style="border: 2px solid #7F7F7F;">{{output}}</text>
-      </scroll>
-      <div class="unit" style="top: 152px;background-color:#175180"onclick=changeUINT2>
-        <text if="{{unit2.shortname}}">{{unit2.shortname}}</text>
-        <text else>{{unit2.name}}</text>
-        <img src="/common/back.png" class="down"/>
+      <div class="input" style="top: 152px;border: 3px solid #175180;" onclick=changeUINT2>
+        <scroll scroll-x=true class="input1">
+          <text>{{output}}</text>
+        </scroll>
+        <text if="{{unit2.shortname}}" class="unit">{{unit2.shortname}}</text>
+        <text else class="unit">{{unit2.name}}</text>
+        <text class="l">|</text>
       </div>
     </div>
     <!--输入法-->
-    <div style="position: absolute;left: 2px; top: 228px;;width: 334px;flex-wrap: wrap;align-content: flex-start;flex-direction: row;">
+    <div class="inputbar" if="{{ismore}}" style="top: 282px;">
+      <img src="/common/clear.png"onclick=clear class="btn"/>
+      <img src="/common/del.png"onclick=del class="btn"/>
+      <img src="/common/change.png"onclick=change class="btn" style="margin-right:0px;"/>
+      <text class="btn"onclick="press('.')">.</text>
+      <text class="btn"onclick="divide">/</text>
+      <img src="/common/info.png"onclick=openab class="btn"style="margin-right:0px;"/>
+      <text class="btn"onclick=nagitve style="margin-left:33px;"show={{TYPE.nagitve}}>±</text>
+      <img src="/common/more2.png"onclick=more class="btn"/>
+    </div>
+    <div class="inputbar" else>
       <text class="btn"onclick="press(7)">7</text>
       <text class="btn"onclick="press(8)">8</text>
-      <text class="btn"onclick="press(9)">9</text>
-      <img src="/common/change.png"onclick=change class="btn" style="margin-right:0px;"/>
-      
+      <text class="btn"onclick="press(9)" style="margin-right:0px;">9</text>
       <text class="btn"onclick="press(4)">4</text>
       <text class="btn"onclick="press(5)">5</text>
-      <text class="btn"onclick="press(6)">6</text>
-      <img src="/common/clear.png"onclick=clear class="btn" style="margin-right:0px;"/>
-      
+      <text class="btn"onclick="press(6)" style="margin-right:0px;">6</text>
       <text class="btn"onclick="press(1)">1</text>
       <text class="btn"onclick="press(2)">2</text>
-      <text class="btn"onclick="press(3)">3</text>
-      <img src="/common/del.png"onclick=del class="btn" style="margin-right:0px;"/>
-      <text class="btn"onclick="divide">/</text>
-      <text class="btn"onclick="press(0)">0</text>
-      <text class="btn"onclick="press('.')">.</text>
-      <text class="btn"onclick=nagitve style="margin-right:0px;"if={{TYPE.nagitve}}>+/-</text>
+      <text class="btn"onclick="press(3)" style="margin-right:0px;">3</text>
+      <text class="btn"onclick="press(0)" style="margin-left:33px;">0</text>
+      <img src="/common/more1.png"onclick=more class="btn"/>
     </div>
-    <!--顶栏-->
-    <img src="/common/info.png" @click="openab()"style="position: absolute; left: 276px; top: 19px" />
-		<div onclick="changeTYPE"style="position: absolute;left: 60px;top:17px; width:216px;height: 42px;display: flex;flex-direction: row;justify-content: center;align-items: center;">
+    <!--img src="/common/info.png" @click="openab()"style="position: absolute; left: 276px; top: 19px" /-->
+		<div onclick="changeTYPE"style="position: absolute;left: 23px;top: 29px; width: 146px;height: 50px;border-radius: 999px;flex-direction: row;justify-content: center;align-items: center;background-color:#262626">
       <text>{{TYPE.name}}</text>
       <img src="/common/back.png" style="transform: rotate(-90deg);transform-origin:20px 20px;"/>
     </div>
     <!--表单-->
     <div class="bg" if={{list.show}}>
-      <text style="position: absolute;left: 60px;top:17px; width:216px;height: 42px;text-align:center">{{list.title}}</text>
-      <list style="position: absolute; top: 65px;left:6px; width: 324px; height: 415px;" id="list" bounces="true">
-        <list-item for="{{list.list}}" onclick="choose({{$idx}})"style="height: 92px;padding-left:20px;background-color: #262626;border-radius: 27px;margin-bottom:8px;flex-shrink: 0;"type="aa">
-          <text>{{$item.name}}</text><text style="color:#A8A8A8;">{{$item.shortname}}</text>
-          <image src="/common/true.png" if="{{$idx==list.choose}}"style="position: absolute;left: 264px;top: 26px;"/>
-          <image src="/common/false.png" else style="position: absolute;left: 264px;top: 26px;"/>
+      <list style="position: absolute;left: 7px;width: 178px; height: 490px;padding-top:85px" id="list" bounces="true">
+        <list-item for="{{list.list}}" onclick="choose({{$idx}})"style="height: 70px;padding-left:7px;margin-bottom:8px;flex-wrap: wrap;"type="aa">
+          <image src="/common/true.png" if="{{$idx==list.choose}}"style="position: absolute;"/>
+          <image src="/common/false.png" else style="position: absolute;"/>
+          <text style="font-size: 30px;">{{$item.name}}</text>
+          <text style="color:#A8A8A8;font-size: 30px;">{{$item.shortname}}</text>
         </list-item>
       </list>
     </div>
     <!--关于-->
-    <scroll scroll-y=true class="bg" if="{{ab}}">
+    <scroll scroll-y=true class="bg" if="{{ab}}" bounces="true">
       <img src="/common/about.png" />
-      <img src="/common/t.png" if={{sci}} style="position: absolute;left: 246px;top: 456px"onclick="changesci" />
-      <img src="/common/f.png" else style="position: absolute;left: 246px;top: 456px"onclick="changesci" />
+      <img src="/common/t.png" if={{sci}} style="position: absolute;left: 112px;top: 487px;"onclick="changesci" />
+      <img src="/common/f.png" else style="position: absolute;left: 112px;top: 487px;"onclick="changesci" />
     </scroll>
-		
-		<img src="/common/back.png" @click="exit('e')"style="position: absolute; left: 20px; top: 19px"/>
+    <!--返回-->
+    <img src="/common/back.png"if={{list.show||ab}} onclick="exit('e')" style="position: absolute;left: 45px;top: 15px;width: 102px; height: 60px;border-radius: 99px;object-fit:none;background-color:#262626;border: 1px solid rgba(0, 0, 0, 0.8);"/>
 	</div>
 </template>
 
 <style>
+.input{
+  position: absolute;
+  left: 5px;
+  top: 86px;
+  width: 182px;
+  height: 55px;
+  border: 3px solid #009945;
+  border-radius: 99px
+}
 .bg{
   position: absolute;
-  width: 336px;
-  height: 480px;
+  width: 192px;
+  height: 490px;
   background-color: black;
 }
 .unit{
   position: absolute;
-  right: 2px;
-  padding-right:50px;
-  min-width: 120px;
-  height: 66px;
-  border-radius: 27px;
-}
-.down{
-  transform: rotate(-90deg);transform-origin:20px 20px;
-  position: absolute;
-  right: 10px;
-  top: 13px;
+  left: 115;
+  height: 55px;
+  background-color: black;
 }
 text{
   font-size: 32px;
   font-weight: bold;
   text-align: left;
   color: #FFFFFF;
-  padding-left: 10px;
 }
 .input1{
   position: absolute;
-  left: 2px;
-  height: 66px;
-  max-width:230px;
-  padding-right:29px
-}
-.input2{
-  font-size: 32px;padding-left: 10px;padding-top: 12px;min-width: 200px;border-radius: 27px;border: 3px solid #FFFFFF;padding-right:10px
+  left: 10px;
+  top: 10px;
+  max-width:102px;
+  height: 35px;
+  padding-right: 20px;
 }
 .btn{
-  margin-right: 4px;
+  margin-left: 2px;
+  margin-right: 2px;
   margin-bottom: 4px;
-  padding-left: 0px;
-  width: 80px;
-  height: 58px;
-  border-radius: 29px;
+  width: 60px;
+  height: 60px;
+  border-radius: 99px;
   text-align: center;
   background-color: #262626;
+}
+.l{
+  position: absolute;
+  left: 108px;
+  top: 8px;
+  width: 8px;
+  text-align: center;
+  color: #9E9E9E;
+}
+.inputbar{
+  position: absolute;
+  top: 218px;
+  width: 192px;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  flex-direction: row;
 }
 </style>
 
@@ -173,7 +189,8 @@ export default {
       choose:0,
       title:"类型",
     },upd:false,
-    sci:true
+    sci:true,
+    ismore:false
   },onInit(){
     that=this
     storage.get({key: 'lstconv',success: (data)=>{
@@ -279,6 +296,8 @@ export default {
     if(divide>-1){prompt.showToast({message: '不能有两个/',duration: 2000});return}
     this.input+='/'
     divide=this.input.length
+  },more(){
+    this.ismore=!this.ismore
   }
 }
 function save(){
