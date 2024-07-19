@@ -50,7 +50,7 @@
     </div>
     <!--表单-->
     <div class="bg" if={{list.show}}>
-      <list style="position: absolute;left: 7px;width: 178px; height: 490px;padding-top:85px" id="list" bounces="true">
+      <list style="position: absolute;left: 7px;width: 178px; height: 490px;padding-top:85px;padding-bottom:55px" id="list" bounces="true">
         <list-item for="{{list.list}}" onclick="choose({{$idx}})"style="height: 70px;padding-left:7px;margin-bottom:8px;flex-wrap: wrap;"type="aa">
           <image src="/common/true.png" if="{{$idx==list.choose}}"style="position: absolute;"/>
           <image src="/common/false.png" else style="position: absolute;"/>
