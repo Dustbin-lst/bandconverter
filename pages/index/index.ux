@@ -239,6 +239,7 @@ export default {
     this.unit1=this.unit2
     this.unit2=temp
     this.input=this.output.toString()
+    vibrator.vibrate({mode: 'short'})
     save()
     getoutput()
   },changeUINT1(){
