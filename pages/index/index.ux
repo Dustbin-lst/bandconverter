@@ -137,6 +137,7 @@ text{
 <script>
 import storage from '@system.storage' 
 import prompt from '@system.prompt' 
+import vibrator from '@system.vibrator' 
 
 class type{
   constructor(name){
@@ -279,23 +280,28 @@ export default {
         behavior: 'smooth'
       })
         }})
+    vibrator.vibrate({mode: 'short'})
     getoutput()
   },del(){
     if(this.input.length==divide)divide=-1
     this.input=this.input.slice(0,-1)
+    vibrator.vibrate({mode: 'short'})
     getoutput()
   },clear(){
     this.input=""
     divide=-1
+    vibrator.vibrate({mode: 'short'})
     getoutput()
   },nagitve(){
     if(that.input=="")return
     this.input=-parseFloat(this.input)+""
+    vibrator.vibrate({mode: 'short'})
     getoutput()
   },divide(){
     if(divide>-1){prompt.showToast({message: '不能有两个/',duration: 2000});return}
     this.input+='/'
     divide=this.input.length
+    vibrator.vibrate({mode: 'short'})
   },more(){
     this.ismore=!this.ismore
   }
