@@ -260,10 +260,12 @@ export default {
         break;
       case 1:
         that.unit1=that.TYPE.list[id]
+        vibrator.vibrate({mode: 'short'})
         getoutput()
         break;
       case 2:
         that.unit2=that.TYPE.list[id]
+        vibrator.vibrate({mode: 'short'})
         getoutput()
         break;
       default:
