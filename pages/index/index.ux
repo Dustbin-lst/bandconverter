@@ -49,7 +49,7 @@
       <img src="/common/back.png" style="transform: rotate(-90deg);transform-origin:20px 20px;"/>
     </div>
     <!--表单-->
-    <div class="bg" if={{list.show}}>
+    <div class="bg" if={{list.show}} id="page">
       <list style="position: absolute;left: 7px;width: 178px; height: 490px;padding-top:85px;padding-bottom:55px" id="list" bounces="true">
         <list-item for="{{list.list}}" onclick="choose({{$idx}})"style="height: 70px;padding-left:7px;margin-bottom:8px;flex-wrap: wrap;"type="aa">
           <image src="/common/true.png" if="{{$idx==list.choose}}"style="position: absolute;"/>
@@ -60,7 +60,7 @@
       </list>
     </div>
     <!--关于-->
-    <scroll scroll-y=true class="bg" if="{{ab}}" bounces="true">
+    <scroll scroll-y=true class="bg" if="{{ab}}" bounces="true" id="page">
       <img src="/common/about.png" />
       <img src="/common/t.png" if={{sci}} style="position: absolute;left: 112px;top: 487px;"onclick="changesci" />
       <img src="/common/f.png" else style="position: absolute;left: 112px;top: 487px;"onclick="changesci" />
@@ -88,7 +88,7 @@
 }
 .unit{
   position: absolute;
-  left: 115;
+  left: 115px;
   height: 55px;
   background-color: black;
 }
@@ -132,12 +132,16 @@ text{
   align-content: flex-start;
   flex-direction: row;
 }
+#page{
+  transform:translateY(-490px)
+}
 </style>
 
 <script>
 import storage from '@system.storage' 
 import prompt from '@system.prompt' 
 import vibrator from '@system.vibrator' 
+import folme from '@system.folme'
 
 class type{
   constructor(name){
@@ -211,25 +215,19 @@ export default {
   },
   exit(a) {
   		if(a.direction=='right'||a=="e"){
-        /*clearInterval(ani)
-        ani=setInterval(()=>{
-        if(that.ani<-480){
-          下面的代码
+        if(this.ab||this.list.show){
+          this.upd=true
+          folme.to({id:"page",toState:{translateY:"-490px"},config:{duration:0.15,ease:"out"}})
+          setTimeout(() => {this.ab=false;this.list.show=false;}, 100);
         }
-        else{that.ani-=10;}
-        },5)
-        */
-        if(this.ab)this.ab=false
-          else if(this.list.show){this.list.show=false;this.upd=true}
-          else this.$app.exit()
-          //clearInterval(ani)
+        else this.$app.exit()
       }
 	},onBackPress(){
     this.exit("e")
     return true
   },openab(){
     this.ab=true
-    //show()
+    show()
   },changesci(){
     this.sci=!this.sci
     save()
@@ -336,12 +334,10 @@ function showlist(list,choose,title,b){
   that.list.title=title
   back=b
   that.list.show=true
+  show()
   setTimeout(()=>{that.$element("list").scrollTo({index: that.list.choose,behavior: 'smooth'});that.upd=0}, 100);
-  //show()
 }
-/*
-const show=()=>{
-  clearInterval(ani);that.ani=-480;ani=setInterval(()=>{if(that.ani>=0)clearInterval(ani);else{that.ani+=10;}},5)
-  //这个应用写了动画，望周知
-}*/
+function show(){
+  setTimeout(()=>{folme.to({id:"page",toState:{translateY:"0px"},config:{duration:0.15,ease:"out"}})}, 50);
+}
 </script>
